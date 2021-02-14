@@ -12,6 +12,8 @@
 // prepend with `https://image.tmdb.org/t/p/w500/` to get the 
 // complete image URL
 
+let db = firebase.firestore()
+
 window.addEventListener('DOMContentLoaded', async function(event) {
     // Step 1: Construct a URL to get movies playing now from TMDB, fetch
     // data and put the Array of movie Objects in a variable called
@@ -55,6 +57,9 @@ window.addEventListener('DOMContentLoaded', async function(event) {
             <a href="#${movie.id}" class="watched-button block text-center text-white bg-green-500 mt-4 px-4 py-2 rounded">I've watched this!</a>
         </div>
         `)
+        // if (db.collection('watchedmovies').document (`${movie.id}`)){
+        //     document.querySelector(`.movie-${movie.id}`).classList.add('opacity-20')
+        // }
     }
 
     // ⬆️ ⬆️ ⬆️ 
@@ -72,15 +77,18 @@ window.addEventListener('DOMContentLoaded', async function(event) {
     //   the movie is watched. Use .classList.remove('opacity-20')
     //   to remove the class if the element already contains it.
     // ⬇️ ⬇️ ⬇️
+
     for (let i=0; i<movies.results.length; i++) {
         let movie = movies.results[i]
         document.querySelector(`.movie-${movie.id}`).addEventListener('click', async function(event){
             event.preventDefault()
             console.log(`${movie.id} was watched`)
             document.querySelector(`.movie-${movie.id}`).classList.add('opacity-20')
+            let addMovie = await db.collection('watchedmovies').doc(`${movie.id}`).set({})
         })
     }
    
+   // let querySnapshot = await db.collection('todos').get()
   
     // ⬆️ ⬆️ ⬆️ 
     // End Step 3
