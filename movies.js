@@ -44,6 +44,7 @@ window.addEventListener('DOMContentLoaded', async function(event) {
     // </div>
     // ⬇️ ⬇️ ⬇️
 
+
     for (let i=0; i<movies.results.length; i++) {
         let movie = movies.results[i]
         let MovieName = movie.original_title
@@ -57,9 +58,22 @@ window.addEventListener('DOMContentLoaded', async function(event) {
             <a href="#${movie.id}" class="watched-button block text-center text-white bg-green-500 mt-4 px-4 py-2 rounded">I've watched this!</a>
         </div>
         `)
-        // if (db.collection('watchedmovies').document (`${movie.id}`)){
-        //     document.querySelector(`.movie-${movie.id}`).classList.add('opacity-20')
-        // }
+        
+        let watchedMoviesPull = await db.collection('watchedmovies').get()
+        let watchedMovies = watchedMoviesPull.docs
+        console.log(watchedMovies)
+        for (let i=0; i<watchedMovies.length; i++) { 
+            console.log(watchedMovies[i])
+            let movieIDs = watchedMovies[i].id
+            
+            if (movieIDs.includes(movie.id)){
+                console.log(`${movie.id}`)
+                document.querySelector(`.movie-${movie.id}`).classList.add('opacity-20')
+            }
+        }
+
+       // if (await db.collection('watchedmovies').doc(`${movie.id}`)){
+
     }
 
     // ⬆️ ⬆️ ⬆️ 
